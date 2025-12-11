@@ -4,6 +4,7 @@ const cartSchema = new mongoose.Schema({
   quantity: {
     type: Number,
     required: Number,
+    min: 1,
   },
 
   product: {
