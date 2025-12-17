@@ -87,7 +87,7 @@ const UserProfile = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50">
+    <div className="min-h-screen bg-linear-to-br from-blue-50 to-purple-50">
       {/* Header */}
       <header className="bg-white shadow-sm">
         <div className="container mx-auto px-4 py-4">
@@ -96,7 +96,7 @@ const UserProfile = () => {
               <ArrowLeft className="w-6 h-6 text-gray-700" />
             </button>
             <div className="flex items-center space-x-2">
-              <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+              <div className="w-10 h-10 bg-linear-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
                 <span className="text-white font-bold text-xl">S</span>
               </div>
               <span className="text-2xl font-bold text-gray-800">ShopHub</span>
@@ -109,11 +109,11 @@ const UserProfile = () => {
       <div className="container mx-auto px-4 py-8 max-w-4xl">
         {/* Profile Header Card */}
         <div className="bg-white rounded-2xl shadow-lg overflow-hidden mb-6">
-          <div className="h-32 bg-gradient-to-r from-blue-500 to-purple-600"></div>
+          <div className="h-32 bg-linear-to-r from-blue-500 to-purple-600"></div>
           <div className="px-6 pb-6">
             <div className="flex flex-col md:flex-row items-center md:items-end -mt-16 mb-4">
               <div className="relative">
-                <div className="w-32 h-32 rounded-full border-4 border-white bg-gradient-to-r from-blue-400 to-purple-500 flex items-center justify-center shadow-xl">
+                <div className="w-32 h-32 rounded-full border-4 border-white bg-linear-to-r from-blue-400 to-purple-500 flex items-center justify-center shadow-xl">
                   <User className="w-16 h-16 text-white" />
                 </div>
                 <button className="absolute bottom-2 right-2 bg-white p-2 rounded-full shadow-lg hover:bg-gray-100 transition">
@@ -129,7 +129,7 @@ const UserProfile = () => {
                   <>
                     <button
                       onClick={handleEditToggle}
-                      className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg hover:shadow-lg transition"
+                      className="flex items-center space-x-2 px-4 py-2 bg-linear-to-r from-blue-500 to-purple-600 text-white rounded-lg hover:shadow-lg transition"
                     >
                       <Edit2 className="w-4 h-4" />
                       <span>Edit Profile</span>
@@ -396,7 +396,7 @@ const UserProfile = () => {
               <div className="flex space-x-3 pt-2">
                 <button
                   onClick={handlePasswordSubmit}
-                  className="flex-1 bg-gradient-to-r from-blue-500 to-purple-600 text-white py-3 rounded-lg font-semibold hover:shadow-lg transition"
+                  className="flex-1 bg-linear-to-r from-blue-500 to-purple-600 text-white py-3 rounded-lg font-semibold hover:shadow-lg transition"
                 >
                   Update Password
                 </button>
