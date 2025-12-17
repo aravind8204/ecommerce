@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import { Mail, Lock, User, Eye, EyeOff, ArrowRight, Phone } from 'lucide-react';
+import {useApp} from "../context/AppContext"
 
 
 const AuthPages = () => {
+
+  const {login,navigate,signup} = useApp();
   const [isLogin, setIsLogin] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
@@ -27,6 +30,8 @@ const AuthPages = () => {
         alert('Please fill in all required fields!');
         return;
       }
+      login(formData.email,formData.password);
+      navigate("/")
       alert(`Login successful!\nEmail: ${formData.email}`);
     } else {
       if (!formData.name || !formData.email || !formData.mobileNumber || !formData.password || !formData.confirmPassword) {
@@ -42,6 +47,7 @@ const AuthPages = () => {
         alert('Please enter a valid 10-digit mobile number!');
         return;
       }
+      signup(formData.name,formData.email,formData.mobileNumber,formData.password);
       alert(`Signup successful!\nName: ${formData.name}\nEmail: ${formData.email}\nMobile: ${formData.mobileNumber}`);
     }
     // Reset form
@@ -71,11 +77,11 @@ const AuthPages = () => {
       <div className="w-full max-w-md">
         {/* Logo */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-white rounded-2xl shadow-lg mb-4">
-            <div className="w-10 h-10 bg-linear-to-r from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
+          <a href="/" className="inline-flex items-center justify-center w-16 h-16 bg-white rounded-2xl shadow-lg mb-4">
+            <div  className="w-10 h-10 bg-linear-to-r from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
               <span className="text-white font-bold text-2xl">S</span>
             </div>
-          </div>
+          </a>
           <h1 className="text-3xl font-bold text-white">ShopHub</h1>
           <p className="text-white text-opacity-90 mt-2">
             {isLogin ? 'Welcome back!' : 'Create your account'}
