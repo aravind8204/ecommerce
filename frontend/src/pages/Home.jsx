@@ -99,7 +99,7 @@ const Home = () => {
               </button>
 
               {/* Profile Dropdown */}
-              <div className="relative" ref={profileRef}>
+              {cookies && <div className="relative" ref={profileRef}>
                 <button
                   onClick={() => setShowProfileMenu(!showProfileMenu)}
                   className="flex items-center space-x-2 p-2 hover:bg-gray-100 rounded-lg transition"
@@ -122,7 +122,7 @@ const Home = () => {
                     </a>
                   </div>
                 )}
-              </div>
+              </div>}
 
               {/* Mobile Menu Toggle */}
               <button
