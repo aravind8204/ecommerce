@@ -50,9 +50,20 @@ const userLogin = TryCatch(async (req, res) => {
 });
 
 // ------------------------------------------------------------
+// Find User
+// ------------------------------------------------------------
+const getUser = TryCatch( async(req, res) => {
+    const {userId} = req.user;
+
+    const user = await userModel.findById({_id:userId});
+
+    res.status(200).json({user,message:"user found"});
+})
+
+// ------------------------------------------------------------
 // Send OTP
 // ------------------------------------------------------------
-const sendOTP = TryCatch(async (req, res) => {
+const sendOTP = TryCatch( async(req, res) => {
     const { email } = req.body;
 
     const user = await userModel.findOne({ email });
@@ -81,7 +92,7 @@ const sendOTP = TryCatch(async (req, res) => {
 // ------------------------------------------------------------
 // Verify OTP
 // ------------------------------------------------------------
-const verifyOTP = TryCatch(async (req, res) => {
+const verifyOTP = TryCatch( async(req, res) => {
     const { email, otp } = req.body;
 
     const OTP = await otpModel.findOne({ email });
@@ -90,7 +101,7 @@ const verifyOTP = TryCatch(async (req, res) => {
         return res.status(404).json({ message: "OTP not found" });
     }
 
-    if (OTP.otp === otp) {
+    if (OTP.otp === parseInt(otp,10)) {
         return res.status(200).json({ message: "OTP verified successfully" });
     }
 
@@ -123,7 +134,7 @@ const updatePassword = TryCatch(async (req, res) => {
 // Delete User
 // ------------------------------------------------------------
 const deleteUser = TryCatch(async (req, res) => {
-    const userId = req.user.userId;
+    const {userId} = req.user;
 
     await userModel.deleteOne({ _id: userId });
 
@@ -136,5 +147,6 @@ module.exports = {
     deleteUser,
     sendOTP,
     verifyOTP,
-    updatePassword
+    updatePassword,
+    getUser
 };

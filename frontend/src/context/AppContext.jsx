@@ -8,6 +8,7 @@ const AppContext = createContext();
 export const AppProvider = ({ children }) => {
   const [cookies, setCookie, removeCookie] = useCookies(["token"]);
   const [isLoggedIn,setIsLoggedIn] = useState(false);
+  const [user,setUser] = useState({});
 
   const navigate = useNavigate();
 
@@ -24,7 +25,10 @@ export const AppProvider = ({ children }) => {
   }
 
   const logout = () =>{
-    removeCookie("token",{path:'/'});
+    removeCookie("token", { path: "/" });
+    setUser({});
+    setIsLoggedIn(false);
+    navigate("/");
   }
 
   const signup = async (name,email,mobileNumber,password)=>{
@@ -36,9 +40,23 @@ export const AppProvider = ({ children }) => {
     }
   }
 
+  const getUser = async()=>{
+    try{
+      const user = await api.get("/user/getuser",{
+        headers:{
+          'Authorization':`Bearer ${cookies.token}`
+        }
+      });
+      setUser(user.data.user);
+    }catch(err){
+      console.log(err);
+    }
+  }
+
   useEffect(()=>{
     if(cookies.token){
       setIsLoggedIn(true);
+      getUser();
     }
     else{
       setIsLoggedIn(false);
@@ -52,7 +70,8 @@ export const AppProvider = ({ children }) => {
         isLoggedIn,
         logout,
         navigate,
-        signup
+        signup,
+        user
       }}
     >
       {children}
