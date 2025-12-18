@@ -55,6 +55,7 @@ const UpdatePassword = () => {
         });
         setIsSuccess(false);
         alert('Password updated successfully! Redirecting to profile...');
+
       }, 2000);
     }, 1500);
   };
@@ -277,19 +278,7 @@ const UpdatePassword = () => {
                         </>
                       )}
                     </button>
-                    <button
-                      onClick={() => {
-                        setPasswordData({
-                          newPassword: '',
-                          confirmPassword: ''
-                        });
-                        alert('Cancelled. Redirecting to profile...');
-                      }}
-                      disabled={isSubmitting}
-                      className="flex-1 bg-gray-200 text-gray-700 py-3 rounded-lg font-semibold hover:bg-gray-300 transition"
-                    >
-                      Cancel
-                    </button>
+                    
                   </div>
                 </div>
               </>

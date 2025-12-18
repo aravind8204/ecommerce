@@ -5,6 +5,7 @@ import AuthPages from './pages/AuthPages';
 import UserProfile from './pages/UserProfile';
 import OTPVerify from './pages/OTPVerify';
 import UpdatePassword from './pages/UpdatePassword';
+import ForgotPassword from './pages/ForgotPassword';
 
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
           <Route path="/profile" element={ <UserProfile/> } />
           <Route path="/verify" element={ <OTPVerify/> } />
           <Route path="/updatepassword" element={ <UpdatePassword /> } />
+          <Route path="/forgotpassword" element={ <ForgotPassword /> } />
         </Routes>
       </div>
   );

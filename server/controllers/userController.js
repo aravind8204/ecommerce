@@ -57,7 +57,7 @@ const getUser = TryCatch( async(req, res) => {
 
     const user = await userModel.findById({_id:userId});
 
-    res.status(200).json({user,message:"user found"});
+    return res.status(200).json({user,message:"user found"});
 })
 
 // ------------------------------------------------------------

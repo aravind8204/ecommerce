@@ -53,6 +53,18 @@ export const AppProvider = ({ children }) => {
     }
   }
 
+  const sendOtp = async({email})=>{
+    try{
+      const user = await api.post("/user/sendotp",{email:email});
+      if(user.status==200){
+        alert("Otp sent successfully");
+      }
+    }catch(err){
+      console.log(err)
+    }
+  }
+
+
   useEffect(()=>{
     if(cookies.token){
       setIsLoggedIn(true);
@@ -71,7 +83,8 @@ export const AppProvider = ({ children }) => {
         logout,
         navigate,
         signup,
-        user
+        user,
+        sendOtp
       }}
     >
       {children}

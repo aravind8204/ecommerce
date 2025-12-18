@@ -1,10 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Lock, ArrowRight, RefreshCw, CheckCircle, Mail } from 'lucide-react';
 import { useApp } from '../context/AppContext';
+import api from "../services/api"
 
 const OTPVerify = () => {
 
-  const {user} = useApp();
+  const {user,navigate} = useApp();
   const [otp, setOtp] = useState(['', '', '', '', '', '']);
   const [isVerifying, setIsVerifying] = useState(false);
   const [isVerified, setIsVerified] = useState(false);
@@ -54,7 +55,7 @@ const OTPVerify = () => {
     inputRefs.current[lastIndex].focus();
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async() => {
     const otpValue = otp.join('');
     
     if (otpValue.length !== 6) {
@@ -64,13 +65,27 @@ const OTPVerify = () => {
 
     setIsVerifying(true);
 
-    // Simulate API call
-    setTimeout(() => {
+    await api.post("/user/verifyotp",{email:user.email,otp:otpValue})
+    .then((res)=>{
+      if(res.status==200){
+        alert("Otp Verified")
+        setIsVerifying(false);
+        setIsVerified(true);
+        navigate("/updatepassword");
+      }
+    }).catch((error)=>{
+      alert("otp verification failed");
       setIsVerifying(false);
-      setIsVerified(true);
-      alert(`OTP Verified Successfully!\nOTP: ${otpValue}`);
+      setIsVerified(false);
+    })
+
+    // // Simulate API call
+    // setTimeout(() => {
+    //   setIsVerifying(false);
+    //   setIsVerified(true);
+    //   alert(`OTP Verified Successfully!\nOTP: ${otpValue}`);
       
-    }, 1500);
+    // }, 1500);
   };
 
   const isComplete = otp.every(digit => digit !== '');

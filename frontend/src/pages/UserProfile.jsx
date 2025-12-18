@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { User, Mail, Phone, MapPin, Calendar, Edit2, Save, X, Lock, Eye, EyeOff, Camera, ArrowLeft } from 'lucide-react';
-import UpdatePassword from './UpdatePassword';
 import { useApp } from '../context/AppContext';
 
 const UserProfile = () => {
 
-  const {user,navigate} = useApp();
+  const {user,navigate,sendOtp} = useApp();
 
 
   const date = new Date(user.createdAt);
@@ -30,10 +29,17 @@ useEffect(() => {
   }
 }, [user]);
 
+const handleUpdate = async()=>{
+  await sendOtp({email:user.email});
+  navigate("/verify");
+}
+
 
 if (!userData) {
   return <p className="text-center mt-10">Loading profile...</p>;
 }
+
+
 
 
   return (
@@ -76,7 +82,7 @@ if (!userData) {
                   <>
                     
                     <button
-                      onClick={() => navigate("/verify")}
+                      onClick={handleUpdate}
                       className="flex items-center space-x-2 px-4 py-2 border-2 border-blue-500 text-blue-600 rounded-lg hover:bg-blue-50 transition"
                     >
                       <Lock className="w-4 h-4" />
