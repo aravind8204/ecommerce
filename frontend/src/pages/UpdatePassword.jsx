@@ -1,7 +1,27 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Lock, Eye, EyeOff, ArrowLeft, CheckCircle, Shield } from 'lucide-react';
+import api from "../services/api";
+import { useLocation,Navigate } from 'react-router-dom';
+import { useApp } from '../context/AppContext';
 
 const UpdatePassword = () => {
+
+  const location = useLocation();
+
+  if (
+  !location.state ||
+  location.state.verified !== true ||
+  !location.state.flow
+  ) {
+    return <Navigate to="/" replace />;
+  }
+
+  const {user,isLoggedIn,navigate} = useApp();
+
+  const [email, setEmail] = useState(location.state?.email || "");
+
+  // const email = user.email || location.state.email ;
+  
   const [showPassword, setShowPassword] = useState({
     new: false,
     confirm: false
@@ -22,7 +42,7 @@ const UpdatePassword = () => {
     });
   };
 
-  const handlePasswordSubmit = (e) => {
+  const handlePasswordSubmit = async(e) => {
     e.preventDefault();
 
     if (!passwordData.newPassword || !passwordData.confirmPassword) {
@@ -42,23 +62,48 @@ const UpdatePassword = () => {
 
     setIsSubmitting(true);
 
-    // Simulate API call
-    setTimeout(() => {
+    await api.put("/user/updatepassword",{email,password:passwordData.newPassword})
+    .then((res)=>{
+      if(res.status==200){
+        alert("password changed successfully");
+        setIsSubmitting(false);
+        setIsSuccess(true);
+        if(location.state.flow==="AUTH"){
+          navigate("/signin");
+          return;
+        }
+        navigate("/profile");
+      }
+    })
+    .catch((error)=>{
+      alert("password updation failed")
       setIsSubmitting(false);
-      setIsSuccess(true);
-      
-      // Reset after showing success
-      setTimeout(() => {
-        setPasswordData({
-          newPassword: '',
-          confirmPassword: ''
-        });
-        setIsSuccess(false);
-        alert('Password updated successfully! Redirecting to profile...');
+      setIsSuccess(false);
+    });
 
-      }, 2000);
-    }, 1500);
+    // Simulate API call
+    // setTimeout(() => {
+    //   setIsSubmitting(false);
+    //   setIsSuccess(true);
+      
+    //   // Reset after showing success
+    //   setTimeout(() => {
+    //     setPasswordData({
+    //       newPassword: '',
+    //       confirmPassword: ''
+    //     });
+    //     setIsSuccess(false);
+    //     alert('Password updated successfully! Redirecting to profile...');
+
+    //   }, 2000);
+    // }, 1500);
   };
+
+  useEffect(() => {
+  if (user?.email) {
+    setEmail(user.email);
+  }
+}, [user]);
 
   const togglePasswordVisibility = (field) => {
     setShowPassword({
@@ -84,16 +129,23 @@ const UpdatePassword = () => {
 
   const passwordStrength = getPasswordStrength(passwordData.newPassword);
 
+  
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500">
       {/* Header */}
       <header className="bg-white bg-opacity-10 backdrop-blur-md border-b border-white border-opacity-20">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
-            <button className="flex items-center space-x-2 text-white hover:bg-white hover:bg-opacity-20 px-4 py-2 rounded-lg transition">
+            {isLoggedIn ? (<button onClick={()=>{navigate("/signin")}} className="flex items-center space-x-2 text-black hover:bg-white hover:bg-opacity-20 px-4 py-2 rounded-lg transition">
               <ArrowLeft className="w-5 h-5" />
               <span>Back to Profile</span>
+            </button>) : (
+              <button onClick={()=>{navigate("/signin")}} className="flex items-center space-x-2 text-black hover:bg-white hover:bg-opacity-20 px-4 py-2 rounded-lg transition">
+              <ArrowLeft className="w-5 h-5" />
+              <span>Back to Sign In</span>
             </button>
+          )}
             <div className="flex items-center space-x-2">
               <div className="w-10 h-10 bg-linear-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
                 <span className="text-white font-bold text-xl">S</span>
@@ -113,7 +165,8 @@ const UpdatePassword = () => {
             <div className="inline-flex items-center justify-center w-16 h-16 bg-white rounded-2xl shadow-lg mb-4">
               <Shield className="w-8 h-8 text-blue-600" />
             </div>
-            <h1 className="text-4xl font-bold text-white mb-2">Update Password</h1>
+            {isLoggedIn ? (<h1 className="text-4xl font-bold text-white mb-2">Update Password</h1>) :
+            (<h1 className="text-4xl font-bold text-white mb-2">Reset Password</h1>)}
             <p className="text-white text-opacity-90">
               Create a strong password to keep your account secure
             </p>
@@ -274,7 +327,7 @@ const UpdatePassword = () => {
                       ) : (
                         <>
                           <Lock className="w-5 h-5" />
-                          <span>Update Password</span>
+                          {isLoggedIn ? (<span>Update Password</span>):(<span>Reset Password</span>)}
                         </>
                       )}
                     </button>

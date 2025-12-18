@@ -1,11 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { User, Mail, Phone, MapPin, Calendar, Edit2, Save, X, Lock, Eye, EyeOff, Camera, ArrowLeft } from 'lucide-react';
 import { useApp } from '../context/AppContext';
+import { Navigate } from 'react-router-dom';
+
 
 const UserProfile = () => {
 
-  const {user,navigate,sendOtp} = useApp();
+  const {user,navigate,sendOtp,isLoggedIn} = useApp();
 
+  if(!user){
+    <Navigate to="/" replace />
+  }
 
   const date = new Date(user.createdAt);
 
@@ -31,7 +36,13 @@ useEffect(() => {
 
 const handleUpdate = async()=>{
   await sendOtp({email:user.email});
-  navigate("/verify");
+  navigate("/verify", {
+  state: {
+    email: user.email,
+    flow: "USER"
+  }
+});
+
 }
 
 
@@ -41,14 +52,13 @@ if (!userData) {
 
 
 
-
   return (
     <div className="min-h-screen bg-linear-to-br from-blue-50 to-purple-50">
       {/* Header */}
       <header className="bg-white shadow-sm">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center space-x-4">
-            <button className="p-2 hover:bg-gray-100 rounded-lg transition">
+            <button onClick={()=> navigate("/")} className="p-2 hover:bg-gray-100 rounded-lg transition">
               <ArrowLeft className="w-6 h-6 text-gray-700" />
             </button>
             <div className="flex items-center space-x-2">

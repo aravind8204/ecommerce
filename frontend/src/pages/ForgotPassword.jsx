@@ -1,7 +1,12 @@
 import React, { useState } from 'react';
 import { Mail, ArrowRight, ArrowLeft, CheckCircle, Shield, AlertCircle } from 'lucide-react';
+import { useApp } from '../context/AppContext';
+
 
 const ForgotPassword = () => {
+
+  const {sendOtp,navigate} = useApp();
+
   const [email, setEmail] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
@@ -12,7 +17,7 @@ const ForgotPassword = () => {
     return emailRegex.test(email);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
     setError('');
 
@@ -28,24 +33,34 @@ const ForgotPassword = () => {
 
     setIsSubmitting(true);
 
+    await sendOtp({email});
+    navigate("/verify", {
+  state: {
+    email,
+    flow: "AUTH"
+  }
+});
+
+
     // Simulate API call
-    setTimeout(() => {
-      setIsSubmitting(false);
-      setIsSuccess(true);
-    }, 2000);
+    // setTimeout(() => {
+    //   setIsSubmitting(false);
+    //   setIsSuccess(true);
+    // }, 2000);
   };
 
   const handleBackToLogin = () => {
     alert('Redirecting to login page...');
+    navigate("/signin")
   };
 
-  const handleResendEmail = () => {
-    setIsSubmitting(true);
-    setTimeout(() => {
-      setIsSubmitting(false);
-      alert('Reset link has been resent to your email!');
-    }, 1500);
-  };
+//   const handleResendEmail = () => {
+//     setIsSubmitting(true);
+//     // setTimeout(() => {
+//     //   setIsSubmitting(false);
+//     //   alert('Reset link has been resent to your email!');
+//     // }, 1500);
+//   };
 
   return (
     <div className="min-h-screen bg-linear-to-br from-blue-500 via-purple-500 to-pink-500">
@@ -145,7 +160,7 @@ const ForgotPassword = () => {
                       </>
                     ) : (
                       <>
-                        <span>Send Reset Link</span>
+                        <span>Send OTP</span>
                         <ArrowRight className="w-5 h-5" />
                       </>
                     )}

@@ -9,6 +9,7 @@ export const AppProvider = ({ children }) => {
   const [cookies, setCookie, removeCookie] = useCookies(["token"]);
   const [isLoggedIn,setIsLoggedIn] = useState(false);
   const [user,setUser] = useState({});
+  const [isForgot,setIsForgot] = useState(false);
 
   const navigate = useNavigate();
 
@@ -17,8 +18,8 @@ export const AppProvider = ({ children }) => {
       const user = await api.post("/user/login",{email,password});
       alert(user.data.message);
       setCookie("token",user.data.token,{ path: '/' });
-      console.log(user.data.token);
       setIsLoggedIn(true);
+      navigate("/")
     }catch(err){
       console.log(err);
     }
@@ -64,6 +65,16 @@ export const AppProvider = ({ children }) => {
     }
   }
 
+  const verifyOtp = async({email,otp}) =>{
+    try{
+      const votp = await api.post("/user/verifyotp",{email,otp});
+
+      return votp;
+    }catch(err){
+      console.log(err);
+    }
+  }
+
 
   useEffect(()=>{
     if(cookies.token){
@@ -84,7 +95,8 @@ export const AppProvider = ({ children }) => {
         navigate,
         signup,
         user,
-        sendOtp
+        sendOtp,
+        verifyOtp
       }}
     >
       {children}

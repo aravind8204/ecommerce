@@ -2,18 +2,25 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Lock, ArrowRight, RefreshCw, CheckCircle, Mail } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import api from "../services/api"
+import { useLocation,Navigate } from 'react-router-dom';
 
 const OTPVerify = () => {
 
-  const {user,navigate} = useApp();
+  const location = useLocation();
+
+  if (!location.state?.email || !location.state?.flow) {
+  return <Navigate to="/" replace />;
+  }
+
+  const {user,navigate,verifyOtp} = useApp();
   const [otp, setOtp] = useState(['', '', '', '', '', '']);
   const [isVerifying, setIsVerifying] = useState(false);
   const [isVerified, setIsVerified] = useState(false);
   const inputRefs = useRef([]);
 
-  useEffect(() => {
-    
-  },);
+  const [email, setEmail] = useState(location.state?.email || "");
+  // const email = user.email || location.state.email;
+
 
   const handleChange = (index, value) => {
     // Only allow numbers
@@ -65,14 +72,21 @@ const OTPVerify = () => {
 
     setIsVerifying(true);
 
-    await api.post("/user/verifyotp",{email:user.email,otp:otpValue})
+    await verifyOtp({email,otp:otpValue})
     .then((res)=>{
-      if(res.status==200){
         alert("Otp Verified")
         setIsVerifying(false);
         setIsVerified(true);
-        navigate("/updatepassword");
-      }
+        navigate("/updatepassword", {
+  replace: true,
+  state: {
+    email: location.state.email,
+    flow: location.state.flow,
+    verified: true
+  }
+});
+
+      
     }).catch((error)=>{
       alert("otp verification failed");
       setIsVerifying(false);
@@ -87,6 +101,12 @@ const OTPVerify = () => {
       
     // }, 1500);
   };
+
+  useEffect(() => {
+  if (user?.email) {
+    setEmail(user.email);
+  }
+}, [user]);
 
   const isComplete = otp.every(digit => digit !== '');
 

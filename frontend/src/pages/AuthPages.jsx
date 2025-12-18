@@ -31,8 +31,8 @@ const AuthPages = () => {
         return;
       }
       login(formData.email,formData.password);
-      navigate("/")
-      alert(`Login successful!\nEmail: ${formData.email}`);
+      
+      //alert(`Login successful!\nEmail: ${formData.email}`);
     } else {
       if (!formData.name || !formData.email || !formData.mobileNumber || !formData.password || !formData.confirmPassword) {
         alert('Please fill in all required fields!');
@@ -218,7 +218,7 @@ const AuthPages = () => {
             {/* Remember Me & Forgot Password (Login Only) */}
             {isLogin && (
               <div className="flex items-center justify-between">
-                <a href="#forgot" className="text-sm text-blue-600 hover:text-blue-700 font-semibold">
+                <a href="/forgotpassword" className="text-sm text-blue-600 hover:text-blue-700 font-semibold">
                   Forgot Password?
                 </a>
               </div>
