@@ -8,6 +8,7 @@ import UpdatePassword from './pages/UpdatePassword';
 import ForgotPassword from './pages/ForgotPassword';
 
 import ProtectedRoute from "./componenets/ProtectedRoute";
+import Product from './pages/Product';
 
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
                                         <UserProfile />
                                       
                                           }  />
+          <Route path="/products" element={<Product/>} />
           <Route path="/verify" element={ <OTPVerify/> } />
           <Route path="/updatepassword" element={ <UpdatePassword /> } />
           <Route path="/forgotpassword" element={ <ForgotPassword /> } />
