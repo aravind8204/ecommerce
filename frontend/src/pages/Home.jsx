@@ -10,6 +10,7 @@ import { useCookies } from "react-cookie";
 import { useApp } from "../context/AppContext";
 import Header from "../componenets/Header";
 import Footer from "../componenets/Footer";
+import {Link} from "react-router-dom";
 
 const Home = () => {
   /* =========================================================
@@ -25,23 +26,25 @@ const Home = () => {
     categories,
     addToCart,
     removeFromCart,
-    getTotalPrice,
+    getTotalPrice,decreaseQty
   } = useApp();
 
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
   const [showCart, setShowCart] = useState(false);
+  const [qty,setQty] = useState(0);
 
   const [cookies] = useCookies(["token"]);
   const profileRef = useRef(null);
 
+
   /* =========================================================
      FILTERED PRODUCTS BASED ON SEARCH & CATEGORY
   ========================================================= */
-  const filteredProducts = products.filter((product) => {
+  const filteredProducts = products.slice(products.length-8,products.length).filter((product) => {
     const matchesCategory =
       selectedCategory === "All" || product.category === selectedCategory;
-    const matchesSearch = product.name
+    const matchesSearch = product.title
       .toLowerCase()
       .includes(searchQuery.toLowerCase());
     return matchesCategory && matchesSearch;
@@ -94,30 +97,50 @@ const Home = () => {
               <>
                 {/* Cart Items */}
                 <div className="space-y-4">
-                  {cartItems.map((item, index) => (
-                    <div
-                      key={index}
-                      className="flex items-center space-x-4 border-b pb-4"
+                {cartItems.map((item) => (
+                <div key={item.id} className="flex items-center space-x-4 border-b pb-4">
+                <img
+                  src={item.image}
+                  alt={item.title}
+                  className="w-20 h-20 object-cover rounded"
+                />
+
+                <div className="flex-1">
+                  <h3 className="font-semibold">{item.title}</h3>
+                  <p className="text-blue-600 font-bold">
+                    ${item.price} × {item.qty}
+                  </p>
+
+                  {/* Quantity Controls */}
+                  <div className="flex items-center gap-2 mt-2">
+                    <button
+                      onClick={() => decreaseQty(item.id)}
+                      className="px-2 py-1 border rounded"
                     >
-                      <img
-                        src={item.image}
-                        alt={item.name}
-                        className="w-20 h-20 object-cover rounded"
-                      />
-                      <div className="flex-1">
-                        <h3 className="font-semibold">{item.name}</h3>
-                        <p className="text-blue-600 font-bold">${item.price}</p>
-                      </div>
-                      <button
-                        onClick={() => removeFromCart(index)}
-                        className="text-red-500 hover:text-red-700"
-                      >
-                        <X className="w-5 h-5" />
-                      </button>
-                    </div>
-                  ))}
+                      −
+                    </button>
+
+                    <span className="font-semibold">{item.qty}</span>
+
+                    <button
+                      onClick={() => addToCart(item)}
+                      className="px-2 py-1 border rounded"
+                    >
+                      +
+                    </button>
+                  </div>
                 </div>
 
+                {/* Remove Button */}
+                <button
+                  onClick={() => removeFromCart(item.id)}
+                  className="text-red-500 hover:text-red-700"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+            ))}
+          </div>
                 {/* Cart Total & Checkout */}
                 <div className="mt-6 pt-6 border-t">
                   <div className="flex justify-between text-xl font-bold mb-4">
@@ -183,20 +206,21 @@ const Home = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {filteredProducts.map((product) => (
             <div
-              key={product.id}
+              key={product._id}
               className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition"
             >
               <img
                 src={product.image}
-                alt={product.name}
+                alt={product.title}
                 className="w-full h-48 object-cover"
               />
               <div className="p-4">
                 <span className="text-xs text-gray-500 uppercase">
                   {product.category}
                 </span>
+                
                 <h3 className="text-lg font-semibold mt-1 mb-2">
-                  {product.name}
+                  <Link to={`/product/${product._id}`}>{product.title}</Link>
                 </h3>
                 <div className="flex items-center justify-between">
                   <span className="text-2xl font-bold text-blue-600">

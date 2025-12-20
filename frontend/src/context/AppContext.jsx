@@ -28,7 +28,7 @@ export const AppProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([]);
 
   /* -------- PRODUCT STATE --------- */
-  // const [products,setProducts] = useState([]);
+  const [products,setProducts] = useState([]);
 
   /* ---------- ROUTER ---------- */
   const navigate = useNavigate();
@@ -45,72 +45,72 @@ export const AppProvider = ({ children }) => {
     "Books",
   ];
 
-  const products = [
-    {
-      id: 1,
-      name: "Wireless Headphones",
-      price: 99.99,
-      category: "Electronics",
-      image:
-        "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&h=300&fit=crop",
-    },
-    {
-      id: 2,
-      name: "Smart Watch",
-      price: 249.99,
-      category: "Electronics",
-      image:
-        "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&h=300&fit=crop",
-    },
-    {
-      id: 3,
-      name: "Designer T-Shirt",
-      price: 29.99,
-      category: "Clothing",
-      image:
-        "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&h=300&fit=crop",
-    },
-    {
-      id: 4,
-      name: "Running Shoes",
-      price: 89.99,
-      category: "Sports",
-      image:
-        "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&h=300&fit=crop",
-    },
-    {
-      id: 5,
-      name: "Coffee Maker",
-      price: 79.99,
-      category: "Home & Garden",
-      image:
-        "https://images.unsplash.com/photo-1517668808822-9ebb02f2a0e6?w=400&h=300&fit=crop",
-    },
-    {
-      id: 6,
-      name: "Bestseller Novel",
-      price: 19.99,
-      category: "Books",
-      image:
-        "https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=400&h=300&fit=crop",
-    },
-    {
-      id: 7,
-      name: "Laptop",
-      price: 999.99,
-      category: "Electronics",
-      image:
-        "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=400&h=300&fit=crop",
-    },
-    {
-      id: 8,
-      name: "Yoga Mat",
-      price: 34.99,
-      category: "Sports",
-      image:
-        "https://images.unsplash.com/photo-1601925260368-ae2f83cf8b7f?w=400&h=300&fit=crop",
-    },
-  ];
+  // const products = [
+  //   {
+  //     id: 1,
+  //     name: "Wireless Headphones",
+  //     price: 99.99,
+  //     category: "Electronics",
+  //     image:
+  //       "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&h=300&fit=crop",
+  //   },
+  //   {
+  //     id: 2,
+  //     name: "Smart Watch",
+  //     price: 249.99,
+  //     category: "Electronics",
+  //     image:
+  //       "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&h=300&fit=crop",
+  //   },
+  //   {
+  //     id: 3,
+  //     name: "Designer T-Shirt",
+  //     price: 29.99,
+  //     category: "Clothing",
+  //     image:
+  //       "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&h=300&fit=crop",
+  //   },
+  //   {
+  //     id: 4,
+  //     name: "Running Shoes",
+  //     price: 89.99,
+  //     category: "Sports",
+  //     image:
+  //       "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&h=300&fit=crop",
+  //   },
+  //   {
+  //     id: 5,
+  //     name: "Coffee Maker",
+  //     price: 79.99,
+  //     category: "Home & Garden",
+  //     image:
+  //       "https://images.unsplash.com/photo-1517668808822-9ebb02f2a0e6?w=400&h=300&fit=crop",
+  //   },
+  //   {
+  //     id: 6,
+  //     name: "Bestseller Novel",
+  //     price: 19.99,
+  //     category: "Books",
+  //     image:
+  //       "https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=400&h=300&fit=crop",
+  //   },
+  //   {
+  //     id: 7,
+  //     name: "Laptop",
+  //     price: 999.99,
+  //     category: "Electronics",
+  //     image:
+  //       "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=400&h=300&fit=crop",
+  //   },
+  //   {
+  //     id: 8,
+  //     name: "Yoga Mat",
+  //     price: 34.99,
+  //     category: "Sports",
+  //     image:
+  //       "https://images.unsplash.com/photo-1601925260368-ae2f83cf8b7f?w=400&h=300&fit=crop",
+  //   },
+  // ];
 
   /* =========================================================
      PRODUCT FUNCTIONS
@@ -120,7 +120,7 @@ export const AppProvider = ({ children }) => {
   const getAllProducts = async() => {
     try{
       const product = await api.get("/product/products");
-      setProducts(product.data);
+      setProducts(product.data.products);
     }catch(err){
       console.log(err);
     }
@@ -130,35 +130,75 @@ export const AppProvider = ({ children }) => {
      CART FUNCTIONS
   ========================================================= */
 
-  const getCartItens = async() => {
+  const getCartItems = async() => {
     try {
       const res = await api.get("/cart/find", {
         headers: {
           Authorization: `Bearer ${cookies.token}`,
         },
       });
-      setCartItems(res.data);
+      console.log(res)
+      setCartItems(res.data.cart);
     } catch (err) {
       console.log(err);
     }
   }
 
+  console.log(cartItems)
+
   // Add product to cart
-  const addToCart = (product) => {
-    setCartItems((prev) => [...prev, product]);
+//   const addToCart = (product) => {
+//   setCartItems((prev) => {
+//     const existing = prev.find((item) => item.id === product.id);
+
+//     if (existing) {
+//       return prev.map((item) =>
+//         item.id === product.id
+//           ? { ...item, qty: item.qty + 1 }
+//           : item
+//       );
+//     }
+
+//     return [...prev, { ...product, qty: 1 }];
+//   });
+// };
+
+  const addToCart = async({product,qty}) => {
+    try{
+      const res = await api.post("/cart/addcart",{productId:product._id,quantity:qty},
+       { headers: {
+          Authorization: `Bearer ${cookies.token}`,
+        },
+      });
+    }catch(err){
+      console.log(err)
+    }
+  }
+
+  const decreaseQty = (id) => {
+  setCartItems((prev) =>
+    prev
+      .map((item) =>
+        item.id === id ? { ...item, qty: item.qty - 1 } : item
+      )
+      .filter((item) => item.qty > 0)
+  );
   };
+
 
   // Remove product from cart using index
-  const removeFromCart = (index) => {
-    setCartItems((prev) => prev.filter((_, i) => i !== index));
-  };
+  const removeFromCart = (id) => {
+  setCartItems((prev) => prev.filter((item) => item.id !== id));
+};
+
 
   // Total items count
-  const cartCount = cartItems.length;
+  const cartCount = cartItems.reduce((t, i) => t + i.qty, 0);
+
 
   // Total cart price
   const getTotalPrice = () =>
-    cartItems.reduce((total, item) => total + item.price, 0).toFixed(2);
+  cartItems.reduce((t, i) => t + i.price * i.qty, 0).toFixed(2);
 
   /* =========================================================
      AUTH FUNCTIONS
@@ -243,13 +283,15 @@ export const AppProvider = ({ children }) => {
 
   // Check login status when token changes
   useEffect(() => {
+    getAllProducts();
     if (cookies.token) {
       setIsLoggedIn(true);
       getUser();
+      getCartItems();
     } else {
       setIsLoggedIn(false);
     }
-  }, [cookies.token]);
+  }, [cookies.token,products]);
 
   /* =========================================================
      CONTEXT PROVIDER
@@ -272,6 +314,7 @@ export const AppProvider = ({ children }) => {
         // Cart
         cartItems,
         addToCart,
+        decreaseQty,
         removeFromCart,
         cartCount,
         getTotalPrice,

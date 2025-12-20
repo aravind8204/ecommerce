@@ -5,10 +5,9 @@ const addProduct = TryCatch( async(req, res) => {
     const {quantity, productId} = req.body;
     const userId = req.user.userId;
 
-    const prevCart = await cartModel.find({user:userId,product:productId});
+    const prevCart = await cartModel.findOne({user:userId,product:productId});
     if(prevCart){
-        await cartModel.updateOne({user:userId,product:productId},{$set:{quantity:quantity}});
-
+       const r = await cartModel.updateOne({user:userId,product:productId},{$set:{quantity:quantity}});
         return res.status(200).json({message:"product added"});
     }
 
@@ -28,7 +27,7 @@ const removeProduct = TryCatch( async(req, res) => {
 const findProducts = TryCatch( async(req, res) => {
     const userId = req.user.userId;
 
-    const cart = await cartModel.find({user:userId});
+    const cart = await cartModel.find({user:userId}).populate("Product");
 
     return res.status(200).json({message:"user cart fetched successfully",cart});
 
