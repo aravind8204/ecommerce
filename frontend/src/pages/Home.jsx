@@ -99,41 +99,25 @@ const Home = () => {
                 <div className="space-y-4">
                 {cartItems.map((item) => (
                 <div key={item.id} className="flex items-center space-x-4 border-b pb-4">
-                <img
-                  src={item.image}
-                  alt={item.title}
+                <img onClick={()=>{navigate(`/product/${item.product._id}`)}}
+                  src={item.product.image}
+                  alt={item.product.title}
                   className="w-20 h-20 object-cover rounded"
                 />
 
                 <div className="flex-1">
-                  <h3 className="font-semibold">{item.title}</h3>
+                  <h3 className="font-semibold">{item.product.title}</h3>
                   <p className="text-blue-600 font-bold">
-                    ${item.price} × {item.qty}
+                    ${item.product.price} × {item.quantity}
                   </p>
 
                   {/* Quantity Controls */}
-                  <div className="flex items-center gap-2 mt-2">
-                    <button
-                      onClick={() => decreaseQty(item.id)}
-                      className="px-2 py-1 border rounded"
-                    >
-                      −
-                    </button>
-
-                    <span className="font-semibold">{item.qty}</span>
-
-                    <button
-                      onClick={() => addToCart(item)}
-                      className="px-2 py-1 border rounded"
-                    >
-                      +
-                    </button>
-                  </div>
+                  
                 </div>
 
                 {/* Remove Button */}
                 <button
-                  onClick={() => removeFromCart(item.id)}
+                  onClick={() => removeFromCart(item._id)}
                   className="text-red-500 hover:text-red-700"
                 >
                   <X className="w-5 h-5" />
@@ -227,10 +211,10 @@ const Home = () => {
                     ${product.price}
                   </span>
                   <button
-                    onClick={() => addToCart(product)}
+                    onClick={() => navigate(`/product/${product._id}`)}
                     className="bg-linear-to-r from-blue-500 to-purple-600 text-white px-4 py-2 rounded-lg hover:opacity-90 transition"
                   >
-                    Add to Cart
+                    View Product
                   </button>
                 </div>
               </div>

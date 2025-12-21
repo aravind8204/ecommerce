@@ -137,14 +137,12 @@ export const AppProvider = ({ children }) => {
           Authorization: `Bearer ${cookies.token}`,
         },
       });
-      console.log(res)
       setCartItems(res.data.cart);
     } catch (err) {
       console.log(err);
     }
   }
 
-  console.log(cartItems)
 
   // Add product to cart
 //   const addToCart = (product) => {
@@ -170,35 +168,48 @@ export const AppProvider = ({ children }) => {
           Authorization: `Bearer ${cookies.token}`,
         },
       });
+
+      getCartItems();
     }catch(err){
       console.log(err)
     }
   }
 
-  const decreaseQty = (id) => {
-  setCartItems((prev) =>
-    prev
-      .map((item) =>
-        item.id === id ? { ...item, qty: item.qty - 1 } : item
-      )
-      .filter((item) => item.qty > 0)
-  );
-  };
 
 
   // Remove product from cart using index
-  const removeFromCart = (id) => {
-  setCartItems((prev) => prev.filter((item) => item.id !== id));
+  const removeFromCart = async(id) => {
+  try{
+    console.log(id)
+    const res = await api.delete(`/cart/delete/${id}`,{headers: {
+          authorization: `Bearer ${cookies.token}`,
+        },
+      });
+      console.log(res)
+  }catch(err){
+    console.log(err);
+  }
 };
 
 
   // Total items count
-  const cartCount = cartItems.reduce((t, i) => t + i.qty, 0);
+  const cartCount = cartItems.reduce(
+  (t, i) => t + (i.quantity || 0),
+  0
+);
+
 
 
   // Total cart price
-  const getTotalPrice = () =>
-  cartItems.reduce((t, i) => t + i.price * i.qty, 0).toFixed(2);
+  const getTotalPrice = () => {
+  return cartItems
+    .reduce((total, item) => {
+      const price = item.product?.price ?? item.price ?? 0;
+      const qty = item.qty ?? item.quantity ?? 1;
+      return total + price * qty;
+    }, 0)
+    .toFixed(2);
+};
 
   /* =========================================================
      AUTH FUNCTIONS
@@ -282,16 +293,20 @@ export const AppProvider = ({ children }) => {
   ========================================================= */
 
   // Check login status when token changes
-  useEffect(() => {
-    getAllProducts();
-    if (cookies.token) {
-      setIsLoggedIn(true);
-      getUser();
-      getCartItems();
-    } else {
-      setIsLoggedIn(false);
-    }
-  }, [cookies.token,products]);
+useEffect(() => {
+  getAllProducts();
+}, []);
+
+useEffect(() => {
+  if (cookies.token) {
+    setIsLoggedIn(true);
+    getUser();
+    getCartItems();
+  } else {
+    setIsLoggedIn(false);
+  }
+}, [cookies.token]);
+
 
   /* =========================================================
      CONTEXT PROVIDER

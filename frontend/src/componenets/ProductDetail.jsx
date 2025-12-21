@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Minus, Plus, X } from "lucide-react";
 // import { ShoppingCart, Search, User, Menu, X, ChevronDown, LogIn } from "lucide-react";
 import Header from "../componenets/Header";
@@ -34,11 +34,19 @@ const ProductDetail = () => {
 
   const product = products.find((product)=> product._id===id);
 
-  const cartProduct = cartItems.find((i) => i.id === product.id);
-  const qt = cartProduct?.qty || 0;
-  if(qt!==0){
-    setQty(qt);
+  useEffect(() => {
+  if (!product) return;
+
+  const cartProduct = cartItems.find(
+    (i) => i.product._id === product._id
+  );
+
+  if (cartProduct) {
+    setQty(cartProduct.quantity);
+  } else {
+    setQty(0);
   }
+}, [cartItems, product]);
 
   const handleCartClick = () => {
     if (!isLoggedIn) {
