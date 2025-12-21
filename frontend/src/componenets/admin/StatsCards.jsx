@@ -1,13 +1,18 @@
 import { Package, Users } from "lucide-react";
+import { useAdmin } from "../../context/AdminContext";
 
-const stats = [
-  { title: "Products", value: 120, icon: Package },
-  { title: "Users", value: 85, icon: Users },
-];
 
 const StatsCards = () => {
+  
+  const {products,users} = useAdmin();
+  
+  const stats = [
+    { title: "Products", value: products?.length, icon: Package },
+    { title: "Users", value: users?.length, icon: Users },
+  ];
+
   return (
-    <div className="grid md:grid-cols-2 gap-6">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
       {stats.map((stat, i) => (
         <div key={i} className="bg-white p-6 rounded-xl shadow">
           <stat.icon />

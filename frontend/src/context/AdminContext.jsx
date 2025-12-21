@@ -27,6 +27,7 @@ export const AdminProvider = ({children}) =>{
             }
         });
         setProducts(res.data.products);
+        return;
         }
         catch(err){
             console.log(err);
@@ -47,6 +48,62 @@ export const AdminProvider = ({children}) =>{
             console.log(err);
         }
     }
+
+    const addProduct =async({title,description,image,price,category})=>{
+        try{
+            const res = await api.post("/product/create",{
+                title,
+                description,
+                image,
+                price,
+                category
+            },{
+            headers:{
+                
+                    Authorization: `Bearer ${cookies.token}`,
+            }
+            });
+            alert("product added successfully");
+            getProducts();
+        }
+        catch(err){
+            console.log(err);
+        }
+    }
+
+    const updateProduct = async({id,data}) => {
+        try{
+            console.log(id," ",data)
+            const res = api.put("/product/updateproduct",{
+                id,data
+            },{
+            headers:{
+                
+                    Authorization: `Bearer ${cookies.token}`,
+            }
+            })
+            alert("product added successfully");
+            getProducts();
+        }
+        catch(err){
+            cosole.log(err);
+        }
+    }
+
+    const deleteProduct = async({id}) =>{
+        try{
+            const res = api.delete(`/product/delete/${id}`,{
+            headers:{
+                
+                    Authorization: `Bearer ${cookies.token}`,
+            }
+            });
+            getProducts();
+        }catch(err){
+            console.log(err);
+        }
+    }
+
     useEffect(()=>{
         if(cookies.token){
             setIsLoggedIn(true);
@@ -61,7 +118,10 @@ export const AdminProvider = ({children}) =>{
     return (
         <AdminContext.Provider value={{
             users,
-            products
+            products,
+            addProduct,
+            updateProduct,
+            deleteProduct
         }}>
             {children}
         </AdminContext.Provider>

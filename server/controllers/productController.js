@@ -9,9 +9,9 @@ const getAllProducts = TryCatch( async(req, res) => {
 })
 
 const createProduct = TryCatch( async(req, res) => {
-    const {title,description,stock,price,images,sold,category} = req.body;
+    const {title,description,price,image,category} = req.body;
     
-    const product = await productModel.create({title,description,stock,price,images,sold,category});
+    const product = await productModel.create({title,description,price,image,category});
 
     return res.status(201).json({message:"Product created successfully",productData:product});
 });
@@ -20,6 +20,7 @@ const updateProduct = TryCatch( async(req, res) => {
     const {id,data} = req.body;
 
     const product = await productModel.findByIdAndUpdate(id,{$set : data},{new:true});
+    console.log(product);
 
     return res.status(200).json({message:"Product updated successfully"});
 });
@@ -33,7 +34,7 @@ const findProduct = TryCatch( async(req, res) => {
 });
 
 const deleteProduct = TryCatch( async(req, res) => {
-    const {id} = req.body;
+    const {id} = req.params;
 
     const product = await productModel.findByIdAndDelete(id);
 

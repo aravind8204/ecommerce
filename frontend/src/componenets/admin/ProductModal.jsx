@@ -8,7 +8,7 @@ const ProductModal = ({
   setShowProductModal
 }) => {
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+    <div className="h-screen fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
       <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6">
         
         {/* Header */}
@@ -33,9 +33,37 @@ const ProductModal = ({
             </label>
             <input
               type="text"
-              value={productForm.name}
+              value={productForm.title}
               onChange={(e) =>
-                setProductForm({ ...productForm, name: e.target.value })
+                setProductForm({ ...productForm, title: e.target.value })
+              }
+              className="w-full px-4 py-2 border rounded-lg"
+            />
+          </div>
+          {/* Description */}
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-2">
+              Description
+            </label>
+            <input
+              type="text"
+              value={productForm.description}
+              onChange={(e) =>
+                setProductForm({ ...productForm, description: e.target.value })
+              }
+              className="w-full px-4 py-2 border rounded-lg"
+            />
+          </div>
+          {/* Description */}
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-2">
+              Image URL
+            </label>
+            <input
+              type="text"
+              value={productForm.image}
+              onChange={(e) =>
+                setProductForm({ ...productForm, image: e.target.value })
               }
               className="w-full px-4 py-2 border rounded-lg"
             />
@@ -78,38 +106,6 @@ const ProductModal = ({
             />
           </div>
 
-          {/* Stock */}
-          <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
-              Stock
-            </label>
-            <input
-              type="number"
-              value={productForm.stock}
-              onChange={(e) =>
-                setProductForm({ ...productForm, stock: e.target.value })
-              }
-              className="w-full px-4 py-2 border rounded-lg"
-            />
-          </div>
-
-          {/* Status */}
-          <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
-              Status
-            </label>
-            <select
-              value={productForm.status}
-              onChange={(e) =>
-                setProductForm({ ...productForm, status: e.target.value })
-              }
-              className="w-full px-4 py-2 border rounded-lg"
-            >
-              <option value="Active">Active</option>
-              <option value="Low Stock">Low Stock</option>
-              <option value="Out of Stock">Out of Stock</option>
-            </select>
-          </div>
 
           {/* Buttons */}
           <div className="flex space-x-3 pt-4">
