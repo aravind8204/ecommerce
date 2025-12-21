@@ -61,6 +61,16 @@ const getUser = TryCatch( async(req, res) => {
 })
 
 // ------------------------------------------------------------
+// Get All Users
+// ------------------------------------------------------------
+const getAllUsers = TryCatch( async(req,res) => {
+
+    const users = await userModel.find({});
+
+    return res.status(200).json({users,message:"users fetched successfully"});
+})
+
+// ------------------------------------------------------------
 // Send OTP
 // ------------------------------------------------------------
 const sendOTP = TryCatch( async(req, res) => {
@@ -148,5 +158,6 @@ module.exports = {
     sendOTP,
     verifyOTP,
     updatePassword,
-    getUser
+    getUser,
+    getAllUsers
 };

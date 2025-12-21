@@ -176,6 +176,15 @@ export const AppProvider = ({ children }) => {
   }
 
 
+  const decreaseQty = (id) => {
+  setCartItems((prev) =>
+    prev
+      .map((item) =>
+        item.id === id ? { ...item, qty: item.qty - 1 } : item
+      )
+      .filter((item) => item.qty > 0)
+  );
+  };
 
   // Remove product from cart using index
   const removeFromCart = async(id) => {
@@ -221,7 +230,7 @@ export const AppProvider = ({ children }) => {
       const res = await api.post("/user/login", { email, password });
 
       alert(res.data.message);
-      setCookie("token", res.data.token, { path: "/" });
+      setCookie("token", res.data.token, { path: "/" , maxAge:60*60*24*7});
       setIsLoggedIn(true);
       navigate("/");
     } catch (err) {

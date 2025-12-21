@@ -6,15 +6,17 @@ const {
     deleteUser,
     sendOTP,
     verifyOTP,
-    getUser} = require("../controllers/userController.js");
-const {isUser} = require("../middlewares/isAuth.js")
+    getUser,
+    getAllUsers} = require("../controllers/userController.js");
+const {isUser,isAdmin} = require("../middlewares/isAuth.js")
 
 const router = express.Router();
 
+router.get("/getuser",isUser,getUser);
+router.get("/users",isAdmin,getAllUsers);
 router.post("/create",createUser);
 router.post("/login",userLogin);
 router.post("/sendotp",sendOTP);
-router.get("/getuser",isUser,getUser);
 router.post("/verifyotp",verifyOTP);
 router.put("/updatepassword",updatePassword);
 router.delete("/delete",isUser,deleteUser);

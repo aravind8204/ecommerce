@@ -10,6 +10,8 @@ import ForgotPassword from './pages/ForgotPassword';
 import ProtectedRoute from "./componenets/ProtectedRoute";
 import Product from './pages/Product';
 import ProductDetail from './componenets/ProductDetail';
+import AdminDashboard from './pages/AdminDashboard';
+import { AdminProvider } from './context/AdminContext';
 
 
 function App() {
@@ -28,6 +30,11 @@ function App() {
           <Route path="/verify" element={ <OTPVerify/> } />
           <Route path="/updatepassword" element={ <UpdatePassword /> } />
           <Route path="/forgotpassword" element={ <ForgotPassword /> } />
+
+          <Route path="/admindashboard" element={ 
+                                        <AdminProvider>
+                                          <AdminDashboard />
+                                        </AdminProvider> } />
         </Routes>
       </div>
   );
