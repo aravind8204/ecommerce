@@ -3,9 +3,24 @@ const { TryCatch } = require("../middlewares/TryCatch.js")
 
 const getAllProducts = TryCatch( async(req, res) => {
     
-    const products = await productModel.find({});
+const page = Number(req.query.page) || 1;
+  const limit = 8;
 
-    return res.status(200).json({message:"all products fetched",products:products});
+  const skip = (page - 1) * limit;
+
+  const totalProducts = await productModel.countDocuments();
+
+  const products = await productModel
+    .find({})
+    .skip(skip)
+    .limit(limit);
+
+  res.status(200).json({
+    products,
+    totalProducts,
+    totalPages: Math.ceil(totalProducts / limit),
+    currentPage: page,
+  });
 })
 
 const createProduct = TryCatch( async(req, res) => {

@@ -7,9 +7,9 @@ import OTPVerify from './pages/OTPVerify';
 import UpdatePassword from './pages/UpdatePassword';
 import ForgotPassword from './pages/ForgotPassword';
 
-import ProtectedRoute from "./componenets/ProtectedRoute";
+import ProtectedRoute from "./components/ProtectedRoute";
 import Product from './pages/Product';
-import ProductDetail from './componenets/ProductDetail';
+import ProductDetail from './components/ProductDetail';
 import AdminDashboard from './pages/AdminDashboard';
 import { AdminProvider } from './context/AdminContext';
 

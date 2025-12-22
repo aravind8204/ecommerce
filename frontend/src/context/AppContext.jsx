@@ -30,6 +30,8 @@ export const AppProvider = ({ children }) => {
   /* -------- PRODUCT STATE --------- */
   const [products,setProducts] = useState([]);
 
+  const [totalPages, setTotalPages] = useState(1);
+
   /* ---------- ROUTER ---------- */
   const navigate = useNavigate();
 
@@ -117,10 +119,11 @@ export const AppProvider = ({ children }) => {
   ========================================================= */
 
   // Get all products
-  const getAllProducts = async() => {
+  const getAllProducts = async(page=1) => {
     try{
-      const product = await api.get("/product/products");
-      setProducts(product.data.products);
+      const res = await api.get(`/product/products?page=${page}`);
+      setProducts(res.data.products);
+      setTotalPages(res.data.totalPages);
     }catch(err){
       console.log(err);
     }
@@ -161,35 +164,40 @@ export const AppProvider = ({ children }) => {
 //   });
 // };
 
-  const addToCart = async({product,qty}) => {
-    try{
-      const res = await api.post("/cart/addcart",{productId:product._id,quantity:qty},
-       { headers: {
+  const addToCart = async ({ product, qty }) => {
+  try {
+    if (qty <= 0) {
+      // remove if quantity is zero
+      const cartItem = cartItems.find(
+        (i) => i.product._id === product._id
+      );
+      if (cartItem) {
+        await removeFromCart(cartItem._id);
+      }
+      return;
+    }
+
+    await api.post(
+      "/cart/addcart",
+      { productId: product._id, quantity: qty },
+      {
+        headers: {
           Authorization: `Bearer ${cookies.token}`,
         },
-      });
+      }
+    );
 
-      getCartItems();
-    }catch(err){
-      console.log(err)
-    }
+    getCartItems();
+  } catch (err) {
+    console.log(err);
   }
+};
 
 
-  const decreaseQty = (id) => {
-  setCartItems((prev) =>
-    prev
-      .map((item) =>
-        item.id === id ? { ...item, qty: item.qty - 1 } : item
-      )
-      .filter((item) => item.qty > 0)
-  );
-  };
 
   // Remove product from cart using index
   const removeFromCart = async(id) => {
   try{
-    console.log(id)
     const res = await api.delete(`/cart/delete/${id}`,{headers: {
           authorization: `Bearer ${cookies.token}`,
         },
@@ -304,7 +312,7 @@ export const AppProvider = ({ children }) => {
   // Check login status when token changes
 useEffect(() => {
   getAllProducts();
-}, []);
+}, [products]);
 
 useEffect(() => {
   if (cookies.token) {
@@ -314,7 +322,7 @@ useEffect(() => {
   } else {
     setIsLoggedIn(false);
   }
-}, [cookies.token]);
+}, [cookies.token,getCartItems]);
 
 
   /* =========================================================
@@ -338,7 +346,6 @@ useEffect(() => {
         // Cart
         cartItems,
         addToCart,
-        decreaseQty,
         removeFromCart,
         cartCount,
         getTotalPrice,
@@ -346,6 +353,8 @@ useEffect(() => {
         // Products
         products,
         categories,
+        totalPages,
+        getAllProducts
       }}
     >
       {children}

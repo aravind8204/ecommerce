@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import Sidebar from "../componenets/admin/SideBar";
-import TopHeader from "../componenets/admin/TopHeader";
-import DashboardHome from "../componenets/admin/DashboardHome";
-import ProductTable from "../componenets/admin/ProductTable";
-import UserTable from "../componenets/admin/UserTable";
-import ProductModal from "../componenets/admin/ProductModal";
+import Sidebar from "../components/admin/SideBar";
+import TopHeader from "../components/admin/TopHeader";
+import DashboardHome from "../components/admin/DashboardHome";
+import ProductTable from "../components/admin/ProductTable";
+import UserTable from "../components/admin/UserTable";
+import ProductModal from "../components/admin/ProductModal";
 import { useAdmin } from "../context/AdminContext";
 
 
